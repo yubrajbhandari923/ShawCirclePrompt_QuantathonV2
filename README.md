@@ -24,8 +24,11 @@
   </a>
 </p>
 
-Open `shaw_circle_challenge.ipynb` to get started on the challenge.
+# A Note on rnning the streamlit dashboard.
+The data should be downloaded from `https://www.kaggle.com/datasets/jacksoncrow/stock-market-dataset` and unzippped inside the data directory.
 
+TO intall dependencies use `pip install uv` => `uv sync` 
+To run the streamlit dashboard `uv run streamlit run enhanced_stock_dashboard.py`
 
 ### **Problem Statement - Detecting and Analyzing Financial Principal Components with QAPCA** 💹
 This challenge will have competitors build L1-PCA classically, followed by QAPCA-R, in order to visualize the natural groupings of different tickers into sectors from price movements. Competitors will be tested on how robustly their implementation manages noise from both the quantum system and the data itself.

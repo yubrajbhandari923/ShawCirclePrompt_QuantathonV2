@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum PCA Stock Analysis - Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            background: #000;
+            color: #fff;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            scroll-snap-align: start;
+            position: relative;
+        }
+
+        .slide-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+        }
+
+        /* Intro Slide */
+        .intro-slide {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .intro-image {
+            max-width: 600px;
+            width: 90%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .intro-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease-out 0.3s backwards;
+        }
+
+        .intro-subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.6s backwards;
+        }
+
+        /* Content Slides */
+        .content-slide {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        }
+
+        .content {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: #fff;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+            opacity: 0.9;
+        }
+
+        li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background: rgba(255, 215, 0, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        .navigation {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-dot:hover,
+        .nav-dot.active {
+            background: #ffd700;
+            transform: scale(1.5);
+        }
+
+        @media (max-width: 768px) {
+            .intro-title {
+                font-size: 2rem;
+            }
+            .intro-subtitle {
+                font-size: 1.2rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            h2 {
+                font-size: 1.5rem;
+            }
+            p, li {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container" id="slideContainer">
+        <!-- Slide 1: Introduction -->
+        <div class="slide intro-slide" id="slide1">
+            <img src="https://images.albertsons-media.com/is/image/ABS/184080250?$ng-ecom-pdp-mobile$&defaultImage=Not_Available"
+                 alt="Introduction"
+                 class="intro-image"
+                 onerror="this.src='https://via.placeholder.com/600x400/667eea/ffffff?text=Quantum+PCA+Analysis'">
+            <h1 class="intro-title"></h1>
+            <p class="intro-subtitle"></p>
+            <div class="scroll-indicator">↓</div>
+        </div>
+
+        <!-- Slide 2: What is PCA? -->
+        <div class="slide content-slide" id="slide2">
+            <div class="content">
+                <h1>What is PCA?</h1>
+                <p style="font-size: 1.3rem; margin-bottom: 2rem;">
+                    <strong>Principal Component Analysis (PCA)</strong> is a dimensionality reduction technique that simplifies large datasets by identifying the key patterns (principal components).
+                </p>
+
+                <h2>Why Use PCA?</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>🎯 Reduce Complexity</h3>
+                        <p>Turn hundreds of features into just a few meaningful ones</p>
+                    </div>
+                    <div class="card">
+                        <h3>🔄 Remove Redundancy</h3>
+                        <p>Eliminate overlapping or correlated information</p>
+                    </div>
+                    <div class="card">
+                        <h3>⚡ Speed Up Computations</h3>
+                        <p>Smaller datasets mean faster model training</p>
+                    </div>
+                    <div class="card">
+                        <h3>🎲 Prevent Overfitting</h3>
+                        <p>Focus on dominant patterns, not random noise</p>
+                    </div>
+                    <div class="card">
+                        <h3>📊 Enhance Visualization</h3>
+                        <p>Plot high-dimensional data in 2D or 3D for better interpretation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: How PCA Works - The Fundamentals -->
+        <div class="slide content-slide" id="slide3">
+            <div class="content">
+                <h1>The Fundamentals — How PCA Works</h1>
+
+                <p style="margin-bottom: 2rem;">At its core, PCA finds a <span class="highlight">linear transformation</span> that maximizes the <span class="highlight">variance</span> of projected data.</p>
+
+                <h2>Given a centered dataset <em>X</em> ∈ ℝ<sup>n×d</sup>:</h2>
+
+                <div class="card" style="margin-top: 1.5rem;">
+                    <h3>Step 1: Compute the covariance matrix</h3>
+                    <div class="code-block" style="font-size: 1.3rem; text-align: center;">
+                        <em>C</em> = (1/<em>n</em>) <em>X</em><sup>T</sup><em>X</em>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 1.5rem;">
+                    <h3>Step 2: Solve the eigenvalue problem</h3>
+                    <div class="code-block" style="font-size: 1.3rem; text-align: center;">
+                        <em>Cv<sub>i</sub></em> = λ<sub><em>i</em></sub><em>v<sub>i</sub></em>
+                    </div>
+                    <p style="margin-top: 1rem;">where <em>v<sub>i</sub></em> are eigenvectors (principal axes) and λ<sub><em>i</em></sub> are eigenvalues (explained variances)</p>
+                </div>
+
+                <ul style="margin-top: 2rem;">
+                    <li>Sort eigenvectors by descending eigenvalues</li>
+                    <li>Project data onto the top <em>k</em> eigenvectors: <strong><em>X</em><sub>reduced</sub> = <em>XV<sub>k</sub></em></strong></li>
+                </ul>
+
+                <p style="margin-top: 1.5rem; text-align: center; font-size: 1.2rem;">
+                    This gives the <span class="highlight">directions of maximum variance</span> i.e. your principal components.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Recursive PCA Approaches -->
+        <div class="slide content-slide" id="slide4">
+            <div class="content">
+                <h1>PCA Approaches: Recursive vs Simultaneous</h1>
+
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3> Recursive PCA (Deflation / One-Component-at-a-Time)</h3>
+                    <ul style="margin-top: 1rem;">
+                        <li>The <span class="highlight">recursive formulation</span> extracts components sequentially, one after another</li>
+                        <li>First, find direction <em>v</em><sub>1</sub> that maximizes variance:</li>
+                    </ul>
+                    <div class="code-block" style="font-size: 1.2rem; text-align: center; margin-top: 1rem;">
+                        <em>v</em><sub>1</sub> = arg max<sub>||<em>v</em>||=1</sub> ||<em>Xv</em>||²
+                    </div>
+                    <ul style="margin-top: 1rem;">
+                        <li>Once <em>v</em><sub>1</sub> is found, we <span class="highlight">deflate the data</span> by removing influence of that component:</li>
+                    </ul>
+                    <div class="code-block" style="font-size: 1.2rem; text-align: center; margin-top: 1rem;">
+                        <em>X'</em> = <em>X</em> − (<em>Xv</em><sub>1</sub>)<em>v</em><sub>1</sub><sup>T</sup>
+                    </div>
+                    <ul style="margin-top: 1rem;">
+                        <li>Then find <em>v</em><sub>2</sub> from residual <em>X'</em>, and repeat recursively</li>
+                    </ul>
+                    <p style="margin-top: 1rem; font-style: italic;">
+                         <strong>Think of it like peeling quantum states off a superposition — one eigenstate at a time.</strong>
+                    </p>
+                    <p style="margin-top: 1rem;">
+                        This process is elegant, intuitive, and computationally efficient when <em>k</em> (number of components) is small.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3> Simultaneous PCA (Full Eigen-Decomposition)</h3>
+                    <ul style="margin-top: 1rem;">
+                        <li>Instead of deflating iteratively, we <span class="highlight">diagonalize the covariance matrix once</span>:</li>
+                    </ul>
+                    <div class="code-block" style="font-size: 1.2rem; text-align: center; margin-top: 1rem;">
+                        <em>C</em> = <em>VΛV</em><sup>T</sup>
+                    </div>
+                    <p style="margin-top: 1rem;">where <em>V</em> contains all eigenvectors and Λ is a diagonal matrix of eigenvalues</p>
+                    <ul style="margin-top: 1rem;">
+                        <li>We then directly take the top <em>k</em> eigenvectors as the principal directions</li>
+                    </ul>
+                    <p style="margin-top: 1rem;">
+                        This method is <span class="highlight">faster for dense datasets</span> and can be <span class="highlight">parallelized</span> — perfect for quantum-style computations.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Quantum Annealing -->
+        <div class="slide content-slide" id="slide5">
+            <div class="content">
+                <h1>Quantum Annealing</h1>
+
+                <div style="text-align: center; margin: 2rem 0;">
+                    <img src="https://docs.dwavequantum.com/en/latest/_images/simple_anneal_one_qubit_without_h.png"
+                         alt="Quantum Annealing Process"
+                         style="max-width: 700px; width: 90%; border-radius: 15px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);">
+                </div>
+
+                <p style="font-size: 1.3rem; margin-bottom: 2rem;">
+                    <strong>Quantum Annealing</strong> is a quantum computing technique that finds the global minimum of an objective function by exploiting quantum tunneling and superposition.
+                </p>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>🌊 Quantum Tunneling</h3>
+                        <p>Unlike classical optimization that climbs over energy barriers, quantum systems can <span class="highlight">tunnel through</span> barriers to escape local minima</p>
+                    </div>
+                    <div class="card">
+                        <h3>❄️ Annealing Process</h3>
+                        <p>System starts in a superposition of all possible states and gradually "freezes" into the optimal solution</p>
+                    </div>
+                    <div class="card">
+                        <h3>🎯 Ising Model</h3>
+                        <p>Problems are mapped to an <span class="highlight">Ising Hamiltonian</span> where qubits represent binary variables (±1)</p>
+                    </div>
+                    
+                </div>
+
+                <div class="card" style="margin-top: 2rem;">
+                    <h3>How it works:</h3>
+                    <ul style="margin-top: 1rem;">
+                        <li>Initialize system in quantum superposition (all states equally likely)</li>
+                        <li>Gradually transition from <span class="highlight">transverse field</span> to <span class="highlight">problem Hamiltonian</span></li>
+                        <li>Quantum fluctuations help avoid local minima</li>
+                        <li>System settles into ground state = optimal solution</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Problem Statement -->
+        <div class="slide content-slide" id="slide6">
+            <div class="content">
+                <h1>Problem Statement</h1>
+                <p>Traditional Principal Component Analysis (PCA) using L2-norm is sensitive to outliers in financial data.</p>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>Challenge</h3>
+                        <p>Financial markets are inherently noisy with frequent outliers from market shocks, flash crashes, and anomalies.</p>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Methodology -->
+        <div class="slide content-slide" id="slide6">
+            <div class="content">
+                <h1>Methodology</h1>
+                <h2>Classical L1-PCA Approach</h2>
+                <ul>
+                    <li>Calculate covariance matrix <span class="highlight">J = X @ X.T</span></li>
+                    <li>Solve binary quadratic optimization using <span class="highlight">dual_annealing</span></li>
+                    <li>Find principal components through recursive deflation</li>
+                    <li>Project data onto orthonormal basis using SVD</li>
+                </ul>
+
+                <h2 style="margin-top: 2rem;">Quantum QAPCA-R Approach</h2>
+                <ul>
+                    <li>Convert covariance matrix to <span class="highlight">Ising model</span></li>
+                    <li>Use <span class="highlight">neal.SimulatedAnnealingSampler</span> for quantum-inspired optimization</li>
+                    <li>Extract best binary solution from quantum annealer</li>
+                    <li>Apply same recursive deflation for orthogonal components</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 7: Mathematical Foundation -->
+        <div class="slide content-slide" id="slide7">
+            <div class="content">
+                <h1>Mathematical Foundation</h1>
+
+                <h2>Objective Function</h2>
+                <div class="code-block">
+minimize: b^T(-J)b
+subject to: b ∈ {±1}^N
+                </div>
+
+                <h2>Recursive Component Update</h2>
+                <div class="code-block">
+J_new = J - (2/r²) * J @ bb^T @ J + (J @ bb^T @ J @ bb^T @ J) / r⁴
+
+where:
+  r² = b_opt^T @ J @ b_opt
+  bb^T = outer(b_opt, b_opt)
+                </div>
+
+                <p>This ensures subsequent components are orthogonal to previous ones.</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Implementation -->
+        <div class="slide content-slide" id="slide8">
+            <div class="content">
+                <h1>Implementation Highlights</h1>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>Data Processing</h3>
+                        <p>Historical stock prices fetched via <strong>yfinance</strong></p>
+                        <p>Daily log returns calculated for volatility normalization</p>
+                    </div>
+                    <div class="card">
+                        <h3>Classical Solver</h3>
+                        <p><strong>scipy.optimize.dual_annealing</strong></p>
+                        <p>Simulated annealing for global optimization</p>
+                    </div>
+                    <div class="card">
+                        <h3>Quantum Solver</h3>
+                        <p><strong>dwave-neal</strong> simulated quantum annealer</p>
+                        <p>Ising model formulation for binary optimization</p>
+                    </div>
+                    <div class="card">
+                        <h3>Visualization</h3>
+                        <p><strong>Streamlit</strong> interactive dashboard</p>
+                        <p>Real-time analysis and comparison</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Results & Analysis -->
+        <div class="slide content-slide" id="slide9">
+            <div class="content">
+                <h1>Results & Analysis</h1>
+
+                <h2>Key Findings</h2>
+                <ul>
+                    <li><span class="highlight">Sector Grouping:</span> Both classical and quantum methods successfully identify natural stock groupings</li>
+                    <li><span class="highlight">Correlation Patterns:</span> Technology stocks (AAPL, AMZN, GOOG, MSFT) cluster together</li>
+                    <li><span class="highlight">Divergence Detection:</span> Energy (XOM) and utility stocks show distinct patterns</li>
+                    <li><span class="highlight">Quantum Advantage:</span> QAPCA-R provides comparable results with potential for hardware acceleration</li>
+                </ul>
+
+                <div class="card" style="margin-top: 2rem;">
+                    <h3>Dashboard Features</h3>
+                    <p>Interactive visualization of PCA embeddings, correlation heatmaps, volatility analysis, and Sharpe ratio comparison across sectors.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Dashboard Demo -->
+        <div class="slide content-slide" id="slide10">
+            <div class="content">
+                <h1>Interactive Dashboard</h1>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>📈 Price & Returns</h3>
+                        <p>Historical price charts</p>
+                        <p>Return distribution analysis</p>
+                        <p>Normalized sector comparison</p>
+                    </div>
+                    <div class="card">
+                        <h3>🔬 PCA Analysis</h3>
+                        <p>Classical L1-PCA embeddings</p>
+                        <p>Quantum QAPCA-R embeddings</p>
+                        <p>Group partition visualization</p>
+                    </div>
+                    <div class="card">
+                        <h3>🌐 Correlations</h3>
+                        <p>Interactive correlation heatmap</p>
+                        <p>Most/least correlated pairs</p>
+                        <p>Sector contagion analysis</p>
+                    </div>
+                    <div class="card">
+                        <h3>📊 Performance</h3>
+                        <p>Volatility comparison</p>
+                        <p>Sharpe ratio analysis</p>
+                        <p>Risk level assessment</p>
+                    </div>
+                </div>
+
+                <p style="margin-top: 2rem; text-align: center; font-size: 1.5rem;">
+                    <strong>Try it live:</strong> <span class="highlight">http://localhost:8501</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Future Work -->
+        <div class="slide content-slide" id="slide11">
+            <div class="content">
+                <h1>Future Directions</h1>
+
+                <ul>
+                    <li><span class="highlight">Real Quantum Hardware:</span> Deploy on D-Wave quantum annealer for true quantum advantage</li>
+                    <li><span class="highlight">Multi-Component Analysis:</span> Extract multiple principal components for deeper insights</li>
+                    <li><span class="highlight">Larger Datasets:</span> Scale to hundreds of stocks across global markets</li>
+                    <li><span class="highlight">Outlier Detection:</span> Automated identification of market anomalies</li>
+                    <li><span class="highlight">Portfolio Optimization:</span> Use PCA embeddings for robust portfolio construction</li>
+                    <li><span class="highlight">Real-Time Analysis:</span> Stream live market data for dynamic risk assessment</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 12: Conclusion -->
+        <div class="slide content-slide" id="slide12">
+            <div class="content">
+                <h1>Conclusion</h1>
+
+                <div class="card">
+                    <h3>Summary</h3>
+                    <p>We successfully implemented both classical and quantum approaches to robust PCA for financial data analysis.</p>
+                </div>
+
+                <div class="grid" style="margin-top: 2rem;">
+                    <div class="card">
+                        <h3>Technical Achievement</h3>
+                        <p>✓ L1-PCA implementation</p>
+                        <p>✓ QAPCA-R quantum solver</p>
+                        <p>✓ Interactive dashboard</p>
+                        <p>✓ Real-time data fetching</p>
+                    </div>
+                    <div class="card">
+                        <h3>Business Value</h3>
+                        <p>✓ Robust outlier handling</p>
+                        <p>✓ Sector contagion detection</p>
+                        <p>✓ Risk assessment tools</p>
+                        <p>✓ Diversification insights</p>
+                    </div>
+                </div>
+
+                <h2 style="text-align: center; margin-top: 3rem; font-size: 2.5rem;">
+                    Thank You!
+                </h2>
+                <p style="text-align: center; margin-top: 1rem;">
+                    <span class="highlight">QuantathonV2 Challenge - Shaw Circle Prompt</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <div class="nav-dot active" onclick="scrollToSlide(0)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(1)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(2)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(3)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(4)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(5)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(6)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(7)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(8)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(9)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(10)"></div>
+        <div class="nav-dot" onclick="scrollToSlide(11)"></div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const navDots = document.querySelectorAll('.nav-dot');
+        const container = document.getElementById('slideContainer');
+
+        function scrollToSlide(index) {
+            slides[index].scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Update active dot on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const index = Array.from(slides).indexOf(entry.target);
+                    navDots.forEach(dot => dot.classList.remove('active'));
+                    navDots[index].classList.add('active');
+                }
+            });
+        }, { threshold: 0.5 });
+
+        slides.forEach(slide => observer.observe(slide));
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const activeIndex = Array.from(navDots).findIndex(dot => dot.classList.contains('active'));
+
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                if (activeIndex < slides.length - 1) {
+                    scrollToSlide(activeIndex + 1);
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                if (activeIndex > 0) {
+                    scrollToSlide(activeIndex - 1);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

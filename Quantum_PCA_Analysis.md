@@ -36,9 +36,7 @@ Yes—**a clear sectoral/“risk-factor” split** emerges. The first L1 compone
 **How Quantum Annealing (QA) works (in one paragraph).**  
 QA encodes the objective as an **Ising Hamiltonian**:
 
-$$
-H(s) = \sum_i h_i s_i + \sum_{i<j} J_{ij} s_i s_j,
-$$
+$$H(s) = \sum_i h_i s_i + \sum_{i<j} J_{ij} s_i s_j,$$
 
 with binary spins $$s_i\in\{\pm1\}$$. The device (or simulator) starts in an easy ground state and **adiabatically** turns on the problem couplings $$(h,J)$$, letting **quantum fluctuations** help traverse energy barriers. If the evolution is sufficiently slow and noise is controlled, the final state concentrates on **low-energy (near-optimal) spin assignments**, which decode to the optimizer $$b^*$$.
 

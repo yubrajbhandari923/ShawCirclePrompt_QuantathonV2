@@ -416,56 +416,36 @@
                         <h3>Challenge</h3>
                         <p>Financial markets are inherently noisy with frequent outliers from market shocks, flash crashes, and anomalies.</p>
                     </div>
-                    
+
+                </div>
+
+                <div style="margin-top: 3rem; text-align: center;">
+                    <h2 style="margin-bottom: 1.5rem;">Our Solution</h2>
+                    <a href="https://github.com/yubrajbhandari923/ShawCirclePrompt_QuantathonV2" target="_blank" style="
+                        display: inline-block;
+                        padding: 1.5rem 3rem;
+                        background: linear-gradient(135deg, #24292e 0%, #000000 100%);
+                        color: white;
+                        text-decoration: none;
+                        border-radius: 50px;
+                        font-size: 1.5rem;
+                        font-weight: bold;
+                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+                        transition: all 0.3s ease;
+                        border: 2px solid #ffd700;
+                    " onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 15px 40px rgba(0, 0, 0, 0.6)';"
+                       onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 10px 30px rgba(0, 0, 0, 0.4)';">
+                        <span style="font-size: 2rem;">⚛️</span> View Code on GitHub
+                    </a>
+                    <p style="margin-top: 1rem; font-size: 1rem; opacity: 0.8;">
+                        Complete implementation with classical L1-PCA and quantum QAPCA-R
+                    </p>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 6: Methodology -->
-        <div class="slide content-slide" id="slide6">
-            <div class="content">
-                <h1>Methodology</h1>
-                <h2>Classical L1-PCA Approach</h2>
-                <ul>
-                    <li>Calculate covariance matrix <span class="highlight">J = X @ X.T</span></li>
-                    <li>Solve binary quadratic optimization using <span class="highlight">dual_annealing</span></li>
-                    <li>Find principal components through recursive deflation</li>
-                    <li>Project data onto orthonormal basis using SVD</li>
-                </ul>
-
-                <h2 style="margin-top: 2rem;">Quantum QAPCA-R Approach</h2>
-                <ul>
-                    <li>Convert covariance matrix to <span class="highlight">Ising model</span></li>
-                    <li>Use <span class="highlight">neal.SimulatedAnnealingSampler</span> for quantum-inspired optimization</li>
-                    <li>Extract best binary solution from quantum annealer</li>
-                    <li>Apply same recursive deflation for orthogonal components</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Slide 7: Mathematical Foundation -->
-        <div class="slide content-slide" id="slide7">
-            <div class="content">
-                <h1>Mathematical Foundation</h1>
-
-                <h2>Objective Function</h2>
-                <div class="code-block">
-minimize: b^T(-J)b
-subject to: b ∈ {±1}^N
-                </div>
-
-                <h2>Recursive Component Update</h2>
-                <div class="code-block">
-J_new = J - (2/r²) * J @ bb^T @ J + (J @ bb^T @ J @ bb^T @ J) / r⁴
-
-where:
-  r² = b_opt^T @ J @ b_opt
-  bb^T = outer(b_opt, b_opt)
-                </div>
-
-                <p>This ensures subsequent components are orthogonal to previous ones.</p>
-            </div>
-        </div>
+        
+        
 
         <!-- Slide 8: Implementation -->
         <div class="slide content-slide" id="slide8">
@@ -549,9 +529,30 @@ where:
                     </div>
                 </div>
 
-                <p style="margin-top: 2rem; text-align: center; font-size: 1.5rem;">
-                    <strong>Try it live:</strong> <span class="highlight">http://localhost:8501</span>
-                </p>
+                <div style="margin-top: 3rem; text-align: center;">
+                    <p style="font-size: 1.5rem; margin-bottom: 2rem;">
+                        <strong>Ready to see it in action?</strong>
+                    </p>
+                    <a href="http://localhost:8501" target="_blank" style="
+                        display: inline-block;
+                        padding: 1.5rem 3rem;
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        text-decoration: none;
+                        border-radius: 50px;
+                        font-size: 1.5rem;
+                        font-weight: bold;
+                        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+                        transition: all 0.3s ease;
+                        border: 2px solid #ffd700;
+                    " onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 15px 40px rgba(102, 126, 234, 0.6)';"
+                       onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 10px 30px rgba(102, 126, 234, 0.4)';">
+                        🚀 Launch Interactive Dashboard
+                    </a>
+                    <p style="margin-top: 1.5rem; font-size: 1rem; opacity: 0.8;">
+                        Click to open the dashboard at <span class="highlight">http://localhost:8501</span>
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -574,35 +575,42 @@ where:
         <!-- Slide 12: Conclusion -->
         <div class="slide content-slide" id="slide12">
             <div class="content">
-                <h1>Conclusion</h1>
+                <h1>Key Takeaways</h1>
 
                 <div class="card">
-                    <h3>Summary</h3>
-                    <p>We successfully implemented both classical and quantum approaches to robust PCA for financial data analysis.</p>
+                    <h3>What We Built</h3>
+                    <p>Successfully implemented both classical L1-PCA and quantum QAPCA-R approaches for robust financial data analysis, demonstrating practical applications of quantum-inspired optimization.</p>
                 </div>
 
                 <div class="grid" style="margin-top: 2rem;">
                     <div class="card">
-                        <h3>Technical Achievement</h3>
-                        <p>✓ L1-PCA implementation</p>
+                        <h3>Technical Achievements</h3>
+                        <p>✓ L1-PCA with outlier robustness</p>
                         <p>✓ QAPCA-R quantum solver</p>
                         <p>✓ Interactive dashboard</p>
-                        <p>✓ Real-time data fetching</p>
+                        <p>✓ Real-time data analysis</p>
                     </div>
                     <div class="card">
-                        <h3>Business Value</h3>
-                        <p>✓ Robust outlier handling</p>
-                        <p>✓ Sector contagion detection</p>
-                        <p>✓ Risk assessment tools</p>
-                        <p>✓ Diversification insights</p>
+                        <h3>Practical Insights</h3>
+                        <p>✓ Sector correlation patterns</p>
+                        <p>✓ Risk assessment metrics</p>
+                        <p>✓ Portfolio diversification</p>
+                        <p>✓ Anomaly detection</p>
                     </div>
                 </div>
 
-                <h2 style="text-align: center; margin-top: 3rem; font-size: 2.5rem;">
-                    Thank You!
-                </h2>
-                <p style="text-align: center; margin-top: 1rem;">
-                    <span class="highlight">QuantathonV2 Challenge - Shaw Circle Prompt</span>
+                <div class="card" style="margin-top: 2rem; background: rgba(255, 215, 0, 0.15); border-color: #ffd700;">
+                    <h3 style="color: #ffd700;">Learning Experience</h3>
+                    <p style="font-size: 1.3rem; line-height: 2;">
+                        This challenge provided invaluable hands-on experience bridging quantum computing theory with practical financial applications. We gained deep insights into optimization techniques, data preprocessing for noisy financial markets, and the importance of robust algorithms in real-world scenarios.
+                    </p>
+                    <p style="margin-top: 1.5rem; font-size: 1.2rem;">
+                        The journey from understanding PCA fundamentals to implementing quantum-inspired solvers reinforced the power of interdisciplinary approaches in solving complex problems.
+                    </p>
+                </div>
+
+                <p style="text-align: center; margin-top: 3rem; font-size: 1.5rem;">
+                    <span class="highlight"></span>
                 </p>
             </div>
         </div>

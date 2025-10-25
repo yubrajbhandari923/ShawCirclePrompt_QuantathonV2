@@ -2,10 +2,10 @@
 Project from SCquantathonv2.
 Implementation of **[Quantum Annealing for Robust Principal Component Analysis](https://arxiv.org/pdf/2501.10431)**
 
-### A Note on rnning the streamlit dashboard.
+### A Note on running the streamlit dashboard.
 The data should be downloaded from `https://www.kaggle.com/datasets/jacksoncrow/stock-market-dataset` and unzippped inside the data directory.
 
-TO intall dependencies use `pip install uv` => `uv sync` 
+To intall dependencies use `pip install uv` => `uv sync` 
 To run the streamlit dashboard `uv run streamlit run enhanced_stock_dashboard.py`
 
 
